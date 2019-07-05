@@ -15,7 +15,7 @@ public class MainActivity extends AppCompatActivity {
 
     EditText etWeight, etHeight;
     Button btnCalc, btnReset;
-    TextView tvDate, tvBMI;
+    TextView tvDate, tvBMI, tvOutcome;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +28,9 @@ public class MainActivity extends AppCompatActivity {
         btnReset = findViewById(R.id.buttonReset);
         tvDate = findViewById(R.id.textViewDate);
         tvBMI = findViewById(R.id.textViewBMI);
+        tvOutcome = findViewById(R.id.textViewOutcome);
+
+        etWeight.requestFocus();
 
         btnCalc.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -35,8 +38,9 @@ public class MainActivity extends AppCompatActivity {
                 float weight = Float.parseFloat(etWeight.getText().toString());
                 float height = Float.parseFloat(etHeight.getText().toString());
                 float bmi = weight / (height * height);
+                String message = "";
 
-                String result = String.format("%.2f", bmi);
+                String result = String.format("%.3f", bmi);
 
                 Calendar now = Calendar.getInstance();
                 String dateTime = now.get(Calendar.DAY_OF_MONTH) + "/" +
@@ -45,8 +49,19 @@ public class MainActivity extends AppCompatActivity {
                         now.get(Calendar.HOUR_OF_DAY) + ":" +
                         now.get(Calendar.MINUTE);
 
+                if(bmi >= 30) {
+                    message = "You are obese";
+                } else if(bmi >= 25 && bmi <= 29.9) {
+                    message = "You are overweight";
+                } else if(bmi >= 18.5 && bmi <= 24.9) {
+                    message = "Your BMI is normal";
+                } else if(bmi < 18.5) {
+                    message = "You are underweight";
+                }
+
                 tvDate.setText(dateTime);
                 tvBMI.setText(result);
+                tvOutcome.setText(message);
             }
         });
 
